@@ -1,0 +1,11 @@
+Problem 4. You are given a solution T to a SubsetSum problem with a S = {s0, s1,...,sn−1}
+and k some non-negative integer. (Recall that T is a solution if it is a subset of S the sum of
+whose elements is equal to k.) Suppose that sn−1 belongs to T. Is it necessarily true that the set
+T −{sn−1} is a solution to the SubsetSum problem with inputs S0
+, k0 where S0 = {s0, s1,...,sn−2}
+and k0 = k − sn−1? Explain. Hint. The sum of an empty set of integers is (by convention) equal
+to 0.
+
+=>The statement can be said to be true.
+
+If we have a subset T that adds up to k and we know that one specific number sn-1 is part of this subset, then removing sn-1 will simply reduce the sum by that number. This means the remaining elements in T must add up to k - sn-1. Since T was originally a valid solution using numbers from S and we are only removing one number that we know was included, the remaining numbers must still form a valid subset for the new target sum. Thus the statement can be said to be true.

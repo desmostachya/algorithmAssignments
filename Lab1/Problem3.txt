@@ -1,0 +1,65 @@
+Problem 3. Greedy Strategies. See if you can solve SubsetSum problems using the following
+greedy strategy. With a greedy strategy, at each step in an algorithm a value that is optimal at
+1
+that time is chosen. Decide whether the following greedy strategy works: Begin by sorting the
+input set S; assume that S in sorted order is as follows: {s0, s1,...,sn−1}. Initialize an empty
+set T; we will add elements to T as we scan S. As you scan S, if s0 ≤ k, put s0 in T; otherwise
+leave it out. Then, if the sum of the elements of T together with s1 is ≤ k, then put s1 in T;
+otherwise leave it out. Then, if the sum of the elements of T together with s2 is ≤ k, put s2 in
+T; otherwise, leave it out Continue this way until every number in S has been checked.
+To illustrate the algorithm, consider the following example: Suppose S = {3, 5, 6, 2} and
+k = 10. After sorting, we have S = {2, 3, 5, 6}. We notice 2 ≤ 10, so we put 2 into T. Now
+T = {2}. Next we check the number 3 in S. Since 2 + 3 ≤ 10, we also place 3 into T. Now
+T = {2, 3}. Next we check the number 5. Since 2 + 3 + 5 = 10, we include 5 in T as well. Now
+T = {2, 3, 5}. Finally we check 6. Since 2 + 3 + 5 + 6 > 10, we reject 6. Our final value for T is
+{2, 3, 5}, and this is a correct solution.
+For this problem, decide if this strategy always works. If not, give an example of a SubsetSum problem for which the algorithm gives an incorrect result. If you think it does work, give
+an argument to support your idea.
+
+
+=>The greedy strategy described works in some cases but does not always find the correct subset that sums to k.
+For example, for case list={3,34,4,12,5,2},k=9, the sorted list becomes list={2,3,4,5,12,34}.
+Here following the greedy approach starting from smaller numbers we can successfully find the subset that sums to k. i.e {2,3,4}
+
+However, say for case list={3,7,8},k=11, the sorted list is the same as the original list here. Here we have a subset that sums to 11 i.e. {3,8}
+but when we follow the greedy algorithm it pushes 7 into the list as well after which it is impossible to insert 8 and find the feasible subset.
+
+In this way this kind  of greedy strategy might not always be well suited to find the subsetsum in such kinds of problems.
+
+Greedy method code:
+
+package com.kush.algorithmassignments;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class SubsetSumG {
+    
+    public static List<Integer> subsetSumG(List<Integer> list, int k) {
+        Collections.sort(list);
+        List<Integer> subset = new ArrayList<>();
+        int sum = 0;
+
+        for (int num : list) {
+            if (sum + num <= k) {
+                subset.add(num);
+                sum += num;
+            }
+        }
+
+        return (sum == k) ? subset : null;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> list1 = List.of(3,34,4,12,5,2);
+        int k1 = 9;
+        System.out.println("Test Case 1: " + subsetSumG(new ArrayList<>(list1), k1));
+
+        List<Integer> list2 = List.of(3, 7, 8);
+        int k2 = 11;
+        System.out.println("Test Case 2 (Fails): " + subsetSumG(new ArrayList<>(list2), k2));
+    }
+}
+
+

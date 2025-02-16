@@ -1,0 +1,15 @@
+Math Problem 2. Consider the following pairs and functions f, g. Decide if it is correct to say
+that, asymptotically, f grows no faster than g, g grows no faster than f, or both.
+(1) f(x)=2x2, g(x) = x2 + 1
+(2) f(x) = x2, g(x) = x3
+(3) f(x)=4x + 1, g(x) = x2 − 1
+
+
+1) f(x) = 2x^2, g(x) = x^2 + 1  
+As x becomes very large, the term x^2 dominates the behavior of both functions. In this case, f(x) = 2x^2 grows faster than g(x) = x^2 + 1 because 2x^2 is simply a scaled version of x^2, while g(x) adds a constant 1. So, asymptotically, both functions grow at the same rate, but f(x) grows no faster than g(x) since the dominant term (x^2) is essentially the same in both functions.
+
+2) f(x) = x^2, g(x) = x^3  
+Here, f(x) = x^2 grows slower than g(x) = x^3 because, for large values of x, x^3 will eventually become much larger than x^2. This means that g(x) grows faster than f(x) asymptotically. So, asymptotically, f(x) grows no faster than g(x).
+
+3) f(x) = 4x + 1, g(x) = x^2 - 1  
+For large values of x, the term x^2 in g(x) dominates, whereas in f(x) = 4x + 1, the term 4x dominates. Since x^2 grows faster than x, g(x) grows faster than f(x) asymptotically. So, asymptotically, f(x) grows no faster than g(x).
