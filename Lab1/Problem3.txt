@@ -17,7 +17,8 @@ For this problem, decide if this strategy always works. If not, give an example 
 an argument to support your idea.
 
 
-=>The greedy strategy described works in some cases but does not always find the correct subset that sums to k.
+=>
+The greedy strategy described works in some cases but does not always find the correct subset that sums to k.
 For example, for case list={3,34,4,12,5,2},k=9, the sorted list becomes list={2,3,4,5,12,34}.
 Here following the greedy approach starting from smaller numbers we can successfully find the subset that sums to k. i.e {2,3,4}
 
