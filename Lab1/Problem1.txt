@@ -1,6 +1,8 @@
-// Problem 1. 
-// GCD Algorithm. Write a Java method int gcd(int m, int n) which accepts
-// positive integer inputs m, n and outputs the greatest common divisor of m and n.
+Problem 1. 
+GCD Algorithm. Write a Java method int gcd(int m, int n) which accepts
+positive integer inputs m, n and outputs the greatest common divisor of m and n.
+
+=>    
 package com.kush.algorithmassignments;
 
 public class GCD {
