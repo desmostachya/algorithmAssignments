@@ -1,0 +1,148 @@
+Lab 2 Solutions
+
+Problem 1: Asymptotic Running Time Analysis
+
+The given procedure contains:
+- First loop: O(n) operations
+- Nested loops where j starts from i: 
+  - For i=0: n iterations
+  - For i=1: n-1 iterations
+  - For i=2: n-2 iterations
+  And so on...
+
+This forms an arithmetic sequence: n + (n-1) + (n-2) + ... + 1
+Sum = n(n+1)/2
+
+Therefore, the asymptotic running time is O(n²)
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 2: Merge Algorithm
+
+A. Algorithm Description
+
+Algorithm Merge(arr1, arr2)
+Input: Two sorted arrays arr1 and arr2
+Output: Merged sorted array result
+
+n1 ← length of arr1
+n2 ← length of arr2
+result ← new array of size n1 + n2
+i ← 0, j ← 0, k ← 0
+
+while i < n1 and j < n2 do
+    if arr1[i] ≤ arr2[j] then
+        result[k] ← arr1[i]
+        i ← i + 1
+    else
+        result[k] ← arr2[j]
+        j ← j + 1
+    k ← k + 1
+
+while i < n1 do
+    result[k] ← arr1[i]
+    i ← i + 1
+    k ← k + 1
+
+while j < n2 do
+    result[k] ← arr2[j]
+    j ← j + 1
+    k ← k + 1
+
+return result
+--------------------------------------------------------------------------------------------------------------------
+
+B. Time Complexity
+The algorithm makes a single pass through both arrays, comparing and copying elements.
+Time complexity: O(n1 + n2) where n1 and n2 are lengths of input arrays.
+--------------------------------------------------------------------------------------------------------------------
+
+C. Java Implementation
+
+public static int[] merge(int[] arr1, int[] arr2) {
+    int n1 = arr1.length;
+    int n2 = arr2.length;
+    int[] result = new int[n1 + n2];
+    
+    int i = 0, j = 0, k = 0;
+    
+    while (i < n1 && j < n2) {
+        if (arr1[i] <= arr2[j]) {
+            result[k++] = arr1[i++];
+        } else {
+            result[k++] = arr2[j++];
+        }
+    }
+    
+    while (i < n1) {
+        result[k++] = arr1[i++];
+    }
+    
+    while (j < n2) {
+        result[k++] = arr2[j++];
+    }
+    
+    return result;
+}
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 3: Big-O and Little-O Proofs
+
+A. True: 1 + 4n² is O(n²)
+Proof: 1 + 4n² ≤ 5n² for all n ≥ 1
+Therefore, 1 + 4n² ≤ cn² where c = 5 for all n ≥ n₀ = 1
+
+--------------------------------------------------------------------------------------------------------------------
+
+B. True: n² - 2n is not O(n)
+Proof by contradiction:
+If n² - 2n were O(n), then ∃c,n₀ such that n² - 2n ≤ cn for all n ≥ n₀
+Rearranging: n² - (c+2)n ≤ 0
+n(n - (c+2)) ≤ 0
+This inequality cannot hold for all large n, as n² grows faster than linear terms.
+
+--------------------------------------------------------------------------------------------------------------------
+
+C. True: log(n) is o(n)
+Proof: lim(n→∞) log(n)/n = 0 
+This follows from L Hopital's rule and proves log(n) is o(n)
+
+--------------------------------------------------------------------------------------------------------------------
+
+D. True: n is not o(n)
+Proof: lim(n→∞) n/n = 1 ≠ 0
+Therefore n does not grow strictly slower than n, so n is not o(n)
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 4: Power Set Implementation In Java
+
+public static List<Set<Integer>> powerSet(List<Integer> X) {
+    List<Set<Integer>> P = new ArrayList<>();
+    Set<Integer> emptySet = new HashSet<>();
+    P.add(emptySet);
+    
+    List<Integer> workingList = new ArrayList<>(X);
+    
+    while (!workingList.isEmpty()) {
+        Integer f = workingList.remove(0);
+        List<Set<Integer>> newSets = new ArrayList<>();
+        
+        for (Set<Integer> set : P) {
+            Set<Integer> newSet = new HashSet<>(set);
+            newSet.add(f);
+            newSets.add(newSet);
+        }
+        
+        P.addAll(newSets);
+    }
+    
+    return P;
+}
+
+--------------------------------------------------------------------------------------------------------------------
+
