@@ -1,0 +1,258 @@
+Lab 2 Contd Solutions
+
+Problem 1: Fibonacci Induction Proof
+
+Prove by induction that for all n > 4, F(n) > (4/3)^n.
+
+First, let's verify our base cases using the table provided:
+- When n = 5: F(5) = 5 > 4.21 = (4/3)^5 ✓
+- When n = 6: F(6) = 8 > 5.62 = (4/3)^6 ✓
+
+So our base cases hold. Now for the inductive step:
+
+Assume that for some k ≥ 6, F(k) > (4/3)^k and F(k-1) > (4/3)^{k-1}.
+
+We need to prove that F(k+1) > (4/3)^{k+1}.
+
+We know that F(k+1) = F(k) + F(k-1)
+
+By our inductive hypothesis:
+F(k+1) = F(k) + F(k-1) > (4/3)^k + (4/3)^{k-1}
+
+Factoring out (4/3)^{k-1}:
+F(k+1) > (4/3)^{k-1} · (4/3 + 1) = (4/3)^{k-1} · (7/3)
+
+Now we need to show that (4/3)^{k-1} · (7/3) > (4/3)^{k+1}
+
+(4/3)^{k-1} · (7/3) = (4/3)^{k-1} · (7/3) = (4/3)^{k-1} · (7/3)
+
+And (4/3)^{k+1} = (4/3)^{k-1} · (4/3)^2 = (4/3)^{k-1} · (16/9)
+
+We need: (4/3)^{k-1} · (7/3) > (4/3)^{k-1} · (16/9)
+
+This simplifies to: 7/3 > 16/9
+
+Computing: 7/3 = 2.33... and 16/9 = 1.77...
+
+Since 2.33... > 1.77..., the inequality holds, and we've proven that F(k+1) > (4/3)^{k+1}.
+
+By the principle of mathematical induction, we've proven that F(n) > (4/3)^n for all n > 4.
+
+**Running time analysis of recursive Fibonacci algorithm:**
+
+If T(n) is the running time of computing F(n) recursively, then:
+T(n) = T(n-1) + T(n-2) + O(1)
+
+This recurrence relation is similar to the Fibonacci recurrence itself, so T(n) grows at roughly the same rate as F(n).
+
+Since we proved F(n) > (4/3)^n for n > 4, the recursive algorithm has a running time of Ω((4/3)^n), which is exponential.
+
+This makes the recursive Fibonacci algorithm very slow, especially for large n, because the number of function calls grows exponentially with n. The algorithm repeatedly recalculates the same Fibonacci numbers many times due to its recursive nature.
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 2: Big-Oh Proofs
+
+a) True or false: 4^n is O(2^n).
+
+False.
+
+To prove this, we need to show that 4^n is not O(2^n).
+
+For 4^n to be O(2^n), there must exist constants c > 0 and n₀ such that:
+4^n ≤ c·2^n for all n ≥ n₀
+
+Rewriting:
+4^n = (2^2)^n = 2^(2n)
+
+So the inequality becomes:
+2^(2n) ≤ c·2^n
+2^n ≤ c
+
+But there's no constant c that can satisfy this for all n ≥ n₀, because 2^n grows without bound as n increases.
+
+Therefore, 4^n is not O(2^n).
+
+--------------------------------------------------------------------------------------------------------------------
+
+b) True or false: log n is Θ(log₃ n).
+
+True.
+
+I need to prove that log n is both O(log₃ n) and Ω(log₃ n).
+
+Using the change of base formula for logarithms:
+log₃ n = log n / log 3
+
+So log n = log₃ n · log 3
+
+Since log 3 is a positive constant, log n and log₃ n differ only by a constant factor.
+
+Therefore, log n is Θ(log₃ n).
+
+--------------------------------------------------------------------------------------------------------------------
+
+c) True or false: (n/2)log(n/2) is Θ(n log n).
+
+True.
+
+I need to prove that (n/2)log(n/2) is both O(n log n) and Ω(n log n).
+
+First, let's simplify (n/2)log(n/2):
+(n/2)log(n/2) = (n/2)[log n - log 2] = (n/2)log n - (n/2)log 2 = (n log n)/2 - (n log 2)/2
+
+For large n, the dominant term is (n log n)/2, which differs from n log n only by a constant factor of 1/2.
+
+Therefore, (n/2)log(n/2) is Θ(n log n).
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 3: Recursive Factorial Analysis
+
+A. Worst-case asymptotic running time using the Guessing Method
+
+Let's guess T(n) = O(n) for the running time of recursiveFactorial(n).
+
+Base case: T(0) = T(1) = O(1) ✓ (constant time for the base case)
+
+Inductive step: For n > 1,
+T(n) = T(n-1) + O(1)
+
+Substituting our guess T(n-1) = O(n-1):
+T(n) = O(n-1) + O(1) = O(n)
+
+Therefore, our guess T(n) = O(n) is correct.
+
+B. Correctness Proof
+
+I'll use induction to prove correctness.
+
+Base cases:
+- For n = 0: recursiveFactorial(0) returns 1, which equals 0! = 1 ✓
+- For n = 1: recursiveFactorial(1) returns 1, which equals 1! = 1 ✓
+
+Inductive step:
+Assume that for some k ≥ 1, recursiveFactorial(k) correctly returns k!.
+
+For n = k+1:
+recursiveFactorial(k+1) = (k+1) * recursiveFactorial(k)
+                        = (k+1) * k!  (by inductive hypothesis)
+                        = (k+1)!
+
+Therefore, recursiveFactorial(n) correctly computes n! for all non-negative integers n.
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 4: Iterative Fibonacci Algorithm
+
+Algorithm:
+
+iterativeFibonacci(n)
+  if n = 0 return 0
+  if n = 1 return 1
+  
+  fib0 = 0
+  fib1 = 1
+  
+  for i = 2 to n:
+    nextFib = fib0 + fib1
+    fib0 = fib1
+    fib1 = nextFib
+  
+  return fib1
+
+Running Time Analysis:
+
+The algorithm has:
+- Constant time initializations
+- A loop that runs (n-1) times with constant work inside
+- Constant time return statement
+
+Therefore, the running time is O(n).
+
+Correctness Proof:
+
+I'll use induction to prove that iterativeFibonacci(n) correctly computes F(n).
+
+Base cases:
+- For n = 0: The algorithm returns 0, which equals F(0) = 0 ✓
+- For n = 1: The algorithm returns 1, which equals F(1) = 1 ✓
+
+Inductive hypothesis:
+Assume that after i iterations of the loop (2 ≤ i ≤ n), fib0 holds F(i-2) and fib1 holds F(i-1).
+
+Initially, before iterations, fib0 = F(0) = 0 and fib1 = F(1) = 1, so the hypothesis holds for i = 2.
+
+Inductive step:
+At iteration i, we compute:
+nextFib = fib0 + fib1 = F(i-2) + F(i-1) = F(i)
+
+Then we update:
+fib0 = fib1 = F(i-1)
+fib1 = nextFib = F(i)
+
+After this update, fib0 holds F(i-1) and fib1 holds F(i), which maintains our inductive hypothesis for the next iteration.
+
+After n iterations, fib1 will hold F(n), which is then returned. Therefore, iterativeFibonacci(n) correctly computes F(n) for all n ≥ 0.
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 5: Master Formula
+
+We have T(n) = T(n/2) + n with T(1) = 1.
+
+This matches the form T(n) = aT(n/b) + f(n) with:
+- a = 1
+- b = 2
+- f(n) = n
+
+To use the Master Theorem, I compare n^(log_b a) with f(n):
+n^(log_2 1) = n^0 = 1
+
+Since f(n) = n grows faster than n^(log_2 1) = 1, we're in case 3 of the Master Theorem.
+
+I need to check the regularity condition: af(n/b) < cf(n) for some c < 1:
+a·f(n/b) = 1·(n/2) = n/2 < (1/2)·n for c = 1/2
+
+Since the regularity condition is satisfied, the solution is:
+T(n) = Θ(f(n)) = Θ(n)
+
+--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+Problem 6: Counting 0s and 1s in Sorted Binary Array
+
+Since the array is sorted, all 0s appear before all 1s. If we can find the position where 0s end and 1s begin, we can count both elements in O(1) time.
+
+This is a perfect application for binary search, which runs in O(log n) time.
+
+countZerosAndOnes(A, n)
+  low = 0
+  high = n - 1
+  
+  // Binary search to find the first 1
+  while low <= high:
+    mid = (low + high) / 2
+    
+    if A[mid] == 0:
+      low = mid + 1
+    else:  // A[mid] == 1
+      high = mid - 1
+  
+  // At this point, low is the index of the first 1
+  zeroCount = low
+  oneCount = n - low
+  
+  return (zeroCount, oneCount)
+
+The running time is O(log n), which is o(n) as required.
+
+The space complexity is O(1) as we only use a constant amount of extra variables.
+
+The algorithm correctly finds the first occurrence of 1 in the array using binary search. Since the array is sorted with all 0s followed by all 1s, the index of the first 1 equals the count of 0s, and the count of 1s is simply n minus the count of 0s.
+
+--------------------------------------------------------------------------------------------------------------------
