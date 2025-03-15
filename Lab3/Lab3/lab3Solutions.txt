@@ -1,1 +1,137 @@
-Lab 3
+Lab 3 Solutions
+
+Problem 1: Amortized Analysis
+
+For a sequence of n operations where the i-th operation costs i if i is an exact power of 2, and 1 otherwise.
+
+Aggregate Analysis:
+We need to find the total cost of n operations and divide by n.
+
+Total cost = Sum of all operation costs
+- Operations costing i: operations 1, 2, 4, 8, 16, ...
+- All other operations cost 1
+
+So the total cost = 1 + 2 + 1 + 4 + 1 + 1 + 1 + 8 + 1 + ... + 1
+
+The powers of 2 up to n are: 2^0, 2^1, 2^2, ..., 2^(log n)
+There are about log n such numbers, and their sum is approximately 2n.
+
+Therefore:
+- Total cost ≈ (n - log n) × 1 + 2n = 3n - log n
+- Amortized cost = Total cost / n ≈ (3n - log n) / n = 3 - (log n)/n ≈ O(1)
+
+Accounting Method:
+We can assign a charge of 3 per operation.
+- For regular operations (cost 1): 1 unit pays for the operation, 2 units go to credit
+- For power-of-2 operations (cost i): we use the 1 unit + the accumulated credit
+
+This works because by the time we reach operation i = 2^k, we've accumulated enough credit from previous operations to cover the extra cost.
+
+Therefore, the amortized cost per operation is O(1).
+
+
+Problem 2: Improving BubbleSort for Sorted Input
+
+public class BubbleSort1 {
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+        boolean swapped = false;
+        
+        for (int i = 0; i < n-1; i++) {
+            swapped = false;
+            for (int j = 0; j < n-i-1; j++) {
+                if (arr[j] > arr[j+1]) {
+                    // swap arr[j] and arr[j+1]
+                    int temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                    swapped = true;
+                }
+            }
+            
+            // If no swapping occurred in this pass, array is sorted
+            if (swapped == false)
+                break;
+        }
+    }
+}
+
+Why this works in O(n) for already sorted arrays:
+- In an already sorted array, no swaps will occur during the first pass
+- The swapped flag remains false, causing the algorithm to break after just one pass
+- This single pass requires n-1 comparisons, giving us O(n) time complexity
+- Without this optimization, we would always do O(n²) comparisons
+
+
+Problem 3: Cutting BubbleSort Runtime in Half
+
+public class BubbleSort2 {
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+        boolean swapped = false;
+        // Keep track of where the last swap occurred
+        int lastSwapped = n - 1;
+        int newLastSwapped;
+        
+        while (lastSwapped > 0) {
+            newLastSwapped = 0;
+            for (int j = 0; j < lastSwapped; j++) {
+                if (arr[j] > arr[j+1]) {
+                    // swap arr[j] and arr[j+1]
+                    int temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                    newLastSwapped = j;
+                }
+            }
+            
+            // Update lastSwapped for next iteration
+            lastSwapped = newLastSwapped;
+        }
+    }
+}
+
+Why this cuts runtime in half:
+- Traditional BubbleSort always scans from index 0 to (n-i-1) in the i-th pass
+- But we know after each pass, elements after the last swap are already in order
+- By tracking the position of the last swap, we avoid unnecessary comparisons
+- In each pass, we only need to scan up to the position of the last swap from the previous pass
+- This approximately halves the number of comparisons on average, especially for partially sorted arrays
+
+
+Problem 4: Sorting Array with Elements {0,1,2}
+
+public static void sortZeroOneTwos(int[] arr) {
+    int n = arr.length;
+    int count0 = 0, count1 = 0, count2 = 0;
+    
+    // Count occurrences of each value
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == 0) count0++;
+        else if (arr[i] == 1) count1++;
+        else count2++; // arr[i] == 2
+    }
+    
+    // Fill array with correct values
+    int i = 0;
+    while (count0 > 0) {
+        arr[i++] = 0;
+        count0--;
+    }
+    while (count1 > 0) {
+        arr[i++] = 1;
+        count1--;
+    }
+    while (count2 > 0) {
+        arr[i++] = 2;
+        count2--;
+    }
+}
+
+Why this is O(n):
+- We only use three counter variables, so space complexity is O(1)
+- We make exactly two passes through the array
+  - First pass: Count occurrences of 0, 1, and 2
+  - Second pass: Fill the array with the correct number of each value in order
+- Each pass takes exactly n operations, so the total time complexity is O(n)
+- This is basically counting sort, which works well for a small fixed range of values
