@@ -1,0 +1,186 @@
+Lab 4 Solutions
+
+Problem 1: Stability of Sorting Algorithms
+
+InsertionSort: Stable
+- Explanation: In insertion sort, when comparing elements with the same value, the algorithm doesn't swap them. It only shifts elements that are strictly greater than the current element being placed. This preserves the original order of equal elements.
+
+BubbleSort: Stable
+- Explanation: Bubble sort only swaps adjacent elements when they're out of order. If two elements have the same value, they won't be swapped, so their relative order is maintained.
+
+SelectionSort: Not Stable
+- Explanation: Selection sort selects the minimum element and places it at the beginning. This can change the relative order of equal elements. For example, if we have [5₁, 2, 5₂, 1] (where 5₁ and 5₂ are equal values but different elements), selection sort might rearrange them to [1, 2, 5₂, 5₁], changing their original order.
+
+Problem 2: MergeSort on [7, 6, 5, 4, 3, 2, 1]
+
+Here's the step-by-step execution:
+
+1. Split [7, 6, 5, 4, 3, 2, 1] into [7, 6, 5, 4] and [3, 2, 1]
+
+2. Split [7, 6, 5, 4] into [7, 6] and [5, 4]
+   - Split [7, 6] into [7] and [6]
+     - Merge [7] and [6] to get [6, 7]
+   - Split [5, 4] into [5] and [4]
+     - Merge [5] and [4] to get [4, 5]
+   - Merge [6, 7] and [4, 5] to get [4, 5, 6, 7]
+
+3. Split [3, 2, 1] into [3] and [2, 1]
+   - [3] is a single element, so it's already sorted
+   - Split [2, 1] into [2] and [1]
+     - Merge [2] and [1] to get [1, 2]
+   - Merge [3] and [1, 2] to get [1, 2, 3]
+
+4. Merge [4, 5, 6, 7] and [1, 2, 3] to get [1, 2, 3, 4, 5, 6, 7]
+
+Problem 3: MergeSortPlus
+
+A. Pseudo-code for MergeSortPlus:
+
+
+MergeSortPlus(A, low, high):
+    if high - low <= 20:
+        InsertionSort(A, low, high)
+    else:
+        mid = (low + high) / 2
+        MergeSortPlus(A, low, mid)
+        MergeSortPlus(A, mid + 1, high)
+        Merge(A, low, mid, high)
+
+
+B. Java code for MergeSortPlus:
+
+
+public class MergeSortPlus {
+    public static void sort(int[] arr) {
+        if (arr == null || arr.length <= 1) return;
+        int[] temp = new int[arr.length];
+        mergeSortPlus(arr, temp, 0, arr.length - 1);
+    }
+    
+    private static void mergeSortPlus(int[] arr, int[] temp, int low, int high) {
+        if (high - low <= 20) {
+            insertionSort(arr, low, high);
+        } else {
+            int mid = low + (high - low) / 2;
+            mergeSortPlus(arr, temp, low, mid);
+            mergeSortPlus(arr, temp, mid + 1, high);
+            merge(arr, temp, low, mid, high);
+        }
+    }
+    
+    private static void insertionSort(int[] arr, int low, int high) {
+        for (int i = low + 1; i <= high; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            while (j >= low && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    }
+    
+    private static void merge(int[] arr, int[] temp, int low, int mid, int high) {
+        // Copy both parts into temp array
+        for (int i = low; i <= high; i++) {
+            temp[i] = arr[i];
+        }
+        
+        int i = low;      // Left array index
+        int j = mid + 1;  // Right array index
+        int k = low;      // Original array index
+        
+        // Copy the smallest values from either the left or right side back to the original array
+        while (i <= mid && j <= high) {
+            if (temp[i] <= temp[j]) {
+                arr[k] = temp[i];
+                i++;
+            } else {
+                arr[k] = temp[j];
+                j++;
+            }
+            k++;
+        }
+        
+        // Copy the rest of the left side of the array into the target array
+        while (i <= mid) {
+            arr[k] = temp[i];
+            k++;
+            i++;
+        }
+    }
+}
+
+C. Testing and Analysis:
+
+To test and compare the running times, I would:
+
+1. Generate arrays of different sizes (e.g., 1000, 10000, 100000 elements)
+2. Create identical copies for both algorithms
+3. Measure the time taken by each algorithm using System.nanoTime()
+4. Run multiple trials for each size to get an average
+
+Expected results: MergeSortPlus should be faster for most practical inputs because insertion sort is more efficient for small arrays due to lower overhead. The crossover point (where MergeSortPlus becomes more efficient than regular MergeSort) will depend on the specific hardware and implementation details.
+
+The threshold of 20 is a common choice, but the optimal value might vary based on the system. You could experiment with different thresholds to find the optimal value for your specific environment.
+
+Problem 4: Binary Trees
+
+A. Four different binary trees with height 3
+
+Since we need different numbers of nodes, I'll create trees with 7, 10, 13, and 15 nodes:
+
+Tree 1 (7 nodes):
+
+    o
+   / \
+  o   o
+ /     \
+o       o
+       / \
+      o   o
+
+
+Tree 2 (10 nodes):
+
+      o
+     / \
+    o   o
+   / \   \
+  o   o   o
+ / \     / \
+o   o   o   o
+
+
+Tree 3 (13 nodes):
+      o
+     / \
+    o   o
+   / \ / \
+  o  o o  o
+ / \   / \
+o   o o   o
+       \
+        o
+
+Tree 4 (15 nodes - complete binary tree):
+
+      o
+     / \
+    o   o
+   / \ / \
+  o  o o  o
+ / \/ \/ \
+o  o o o  o
+
+B. Statement Analysis
+
+The statement "Every binary tree of height 3 has at most 2³ = 8 leaves" is true.
+
+A binary tree of height h can have at most 2^h leaves. In this case, h = 3, so the maximum number of leaves is 2³ = 8. This happens in a perfect binary tree where all levels are completely filled.
+
+C. General Statement
+
+For a binary tree of height n, the maximum number of leaves is 2^n.
+
+This is because in a perfect binary tree, each level i has 2^i nodes, and all leaves are at the bottom level (level n). The number of nodes at level n is 2^n, which represents the maximum possible number of leaves.

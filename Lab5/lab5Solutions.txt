@@ -1,0 +1,128 @@
+QuickSort Assignment Solutions
+
+Question 1: QuickSort steps for [1, 6, 2, 4, 3, 5]
+
+First, let's understand what QuickSort does:
+- Choose a pivot (we'll use the leftmost element)
+- Put smaller elements to the left of pivot and larger elements to the right
+- Recursively sort the left and right parts
+
+Here are the steps:
+
+Initial Array: [1, 6, 2, 4, 3, 5]
+
+Step 1:
+- Pivot = 1 (leftmost element)
+- Since 1 is the smallest, it stays in place
+- After partitioning: [1 | 6, 2, 4, 3, 5]
+
+Step 2: 
+- Sort right side [6, 2, 4, 3, 5]
+- Pivot = 6 (leftmost of this subarray)
+- Partition: [2, 4, 3, 5 | 6]
+
+Step 3: 
+- Sort left side [2, 4, 3, 5]
+- Pivot = 2 (leftmost)
+- Partition: [2 | 4, 3, 5]
+
+Step 4: 
+- Sort right side [4, 3, 5]
+- Pivot = 4
+- Partition: [3 | 4 | 5]
+
+Step 5: 
+- Sort [3] - already sorted
+- Sort [5] - already sorted
+
+Final sorted array: [1, 2, 3, 4, 5, 6]
+
+Question 2: Good pivots in [5, 1, 4, 3, 6, 2, 7, 1, 3]
+
+We need to find values where:
+- Elements < x are less than 3n/4
+- Elements > x are less than 3n/4
+
+Here n = 9, so 3n/4 = 6.75. Any value where fewer than 7 elements are less than it, and fewer than 7 elements are greater than it, is a good pivot.
+
+For each value:
+1. Value 1: 0 elements < 1, 7 elements > 1 (Not good: too many greater)
+2. Value 2: 3 elements < 2, 6 elements > 2 (Good pivot)
+3. Value 3: 4 elements < 3, 4 elements > 3 (Good pivot)
+4. Value 4: 6 elements < 4, 2 elements > 4 (Good pivot)
+5. Value 5: 7 elements < 5, 1 element > 5 (Not good: too many less)
+6. Value 6: 7 elements < 6, 1 element > 6 (Not good: too many less)
+7. Value 7: 8 elements < 7, 0 elements > 7 (Not good: too many less)
+
+So the good pivots are 2, 3, and 4. That's 3 out of 9 elements, which is 33.3%. This is less than half, so for this specific array, it's not true that at least half the elements are good pivots.
+
+Question 3: o(n) algorithm for finding m where A[m] = m
+
+Since the array is sorted and has distinct integers, we can use a modified binary search:
+
+function findMatchingIndex(A):
+    left = 0
+    right = length(A) - 1
+    
+    while left <= right:
+        mid = (left + right) / 2
+        if A[mid] == mid:
+            return mid
+        else if A[mid] > mid:
+            right = mid - 1
+        else:
+            left = mid + 1
+    
+    return "No matching index found"
+
+This runs in O(log n) time, which is o(n).
+
+Proof: In each iteration, we eliminate half of the remaining elements, leading to log n iterations. Since log n grows slower than n for large n, O(log n) is o(n).
+
+Question 4: Pivot strategy for O(n log n) worst-case
+
+To guarantee O(n log n) worst-case, we can use the "median-of-medians" algorithm:
+
+1. Divide the array into groups of 5 elements
+2. Find the median of each group (using a simple sorting algorithm)
+3. Recursively find the median of these medians
+4. Use this "median of medians" as the pivot
+
+This ensures a balanced partition even in the worst case, giving us O(n log n) time complexity.
+
+Question 5: QuickSelect for finding median of [1, 12, 8, 7, -2, -3, 6]
+
+We want to find the 4th smallest element (median of 7 elements).
+
+Step 1:
+- Pivot = 1 (leftmost)
+- Partition: [-3, -2 | 1 | 12, 8, 7, 6]
+- 1 is at position 2 (0-indexed)
+- We need position 3, which is in the right partition
+
+Step 2:
+- New array: [12, 8, 7, 6]
+- Pivot = 12
+- Partition: [8, 7, 6 | 12]
+- 12 is at position 6
+- We need position 3, which is in the left partition
+
+Step 3:
+- New array: [8, 7, 6]
+- Pivot = 8
+- Partition: [7, 6 | 8]
+- 8 is at position 5
+- We need position 3, which is in the left partition
+
+Step 4:
+- New array: [7, 6]
+- Pivot = 7
+- Partition: [6 | 7]
+- 7 is at position 4
+- We need position 3, which is in the left partition
+
+Step 5:
+- New array: [6]
+- Only one element, so 6 is our answer
+
+Therefore, the median is 6.
