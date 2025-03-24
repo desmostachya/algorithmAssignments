@@ -1,0 +1,121 @@
+Lab 5 Solutions
+
+Problem 1: QuickSort Steps for [1, 6, 2, 4, 3, 5]
+
+First pass:
+- Pivot = 1 (leftmost element)
+- Elements less than 1: none
+- Elements greater than 1: [6, 2, 4, 3, 5]
+- After partitioning: [1, 6, 2, 4, 3, 5]
+- The pivot 1 is now in its correct position
+
+Second pass (right subarray [6, 2, 4, 3, 5]):
+- Pivot = 6 (leftmost element of this subarray)
+- Elements less than 6: [2, 4, 3, 5]
+- Elements greater than 6: none
+- After partitioning: [1, 2, 4, 3, 5, 6]
+- The pivot 6 is now in its correct position
+
+Third pass (subarray [2, 4, 3, 5]):
+- Pivot = 2 (leftmost element)
+- Elements less than 2: none
+- Elements greater than 2: [4, 3, 5]
+- After partitioning: [1, 2, 4, 3, 5, 6]
+- The pivot 2 is now in its correct position
+
+Fourth pass (subarray [4, 3, 5]):
+- Pivot = 4 (leftmost element)
+- Elements less than 4: [3]
+- Elements greater than 4: [5]
+- After partitioning: [1, 2, 3, 4, 5, 6]
+- The pivot 4 is now in its correct position
+
+Fifth pass (subarray [3]):
+- Only one element, already sorted
+
+Sixth pass (subarray [5]):
+- Only one element, already sorted
+
+Final sorted array: [1, 2, 3, 4, 5, 6]
+
+Problem 2: Good Pivots
+
+For the array A = [5, 1, 4, 3, 6, 2, 7, 1, 3], we need to identify which elements would be good pivots.
+
+Since n = 9, we have 3n/4 = 27/4 = 6.75, so a good pivot is one where the number of elements less than it and the number of elements greater than it are both less than 7.
+
+Let's analyze each value:
+- 1: There are 0 elements < 1 and 7 elements > 1. Since 7 ≥ 6.75, this is NOT a good pivot.
+- 2: There are 2 elements < 2 and 5 elements > 2. Both are < 6.75, so this IS a good pivot.
+- 3: There are 2 elements < 3 and 3 elements > 3. Both are < 6.75, so this IS a good pivot.
+- 4: There are 4 elements < 4 and 2 elements > 4. Both are < 6.75, so this IS a good pivot.
+- 5: There are 6 elements < 5 and 1 element > 5. Both are < 6.75, so this IS a good pivot.
+- 6: There are 7 elements < 6 and 1 element > 6. Since 7 ≥ 6.75, this is NOT a good pivot.
+- 7: There are 8 elements < 7 and 0 elements > 7. Since 8 ≥ 6.75, this is NOT a good pivot.
+
+So the good pivots are: 2, 3, 4, and 5.
+
+b. There are 4 good pivots out of 9 elements (counting duplicates). 4/9 is less than 1/2, so it's not true that at least half the elements are good pivots in this case. However, if we count unique values (7 unique values), then 4/7 > 1/2, so more than half of the unique values are good pivots.
+
+Problem 3: Finding m where A[m] = m in sorted array
+
+Here's an o(n) algorithm:
+
+
+function FindFixedPoint(A, low, high):
+    if (low > high):
+        return "Not found"
+    
+    mid = (low + high) / 2
+    
+    if (A[mid] == mid):
+        return mid
+    else if (A[mid] > mid):
+        // Since A is sorted, if A[mid] > mid, then all elements to the right
+        // will also have A[i] > i because the difference grows
+        return FindFixedPoint(A, low, mid - 1)
+    else:
+        // If A[mid] < mid, all elements to the left will have A[i] < i
+        return FindFixedPoint(A, mid + 1, high)
+
+
+Proof of o(n) runtime:
+This is a binary search algorithm that reduces the search space by half in each iteration. The algorithm runs in O(log n) time, which is o(n) since log n grows more slowly than n.
+
+Problem 4: QuickSort with O(n log n) worst-case
+
+To guarantee O(n log n) worst-case for QuickSort, we can use the median-of-medians algorithm for pivot selection:
+
+1. Divide the array into groups of 5 elements
+2. Find the median of each group (can be done in constant time)
+3. Recursively find the median of these medians
+4. Use this "median of medians" as the pivot
+
+This strategy guarantees that the pivot will always be a decent approximation of the true median, ensuring balanced partitions and O(n log n) worst-case performance.
+
+Problem 5: QuickSelect Steps
+
+Let's find the median of [1, 12, 8, 7, -2, -3, 6] using QuickSelect:
+
+Since n = 7, the median is the element at position 3 (0-indexed) or 4th smallest element.
+
+First pass:
+- Pivot = 1 (leftmost element)
+- Partition: [-3, -2, 1, 12, 8, 7, 6]
+- Pivot position = 2
+
+Since the pivot position (2) is less than our target position (3), we need to look at the right subarray.
+
+Second pass (subarray [12, 8, 7, 6]):
+- Pivot = 12 (leftmost element)
+- Partition: [6, 8, 7, 12]
+- Pivot position = 3 + 3 = 6 (original pivot position + current pivot position)
+
+Since our pivot position (6) is greater than our target position (3), we need to look at the left subarray.
+
+Third pass (subarray [6, 8, 7]):
+- Pivot = 6 (leftmost element)
+- Partition: [6, 8, 7]
+- Pivot position = 3 + 0 = 3 (original position + current position)
+
+The pivot position is now 3, which is our target position. So the median is 6.
