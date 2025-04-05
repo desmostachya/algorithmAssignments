@@ -1,0 +1,91 @@
+1. Minimum Comparisons to Sort 4 Elements
+A comparison-based sorting algorithm operates by comparing pairs of elements and determining their order. The lower bound for such algorithms is determined using a decision tree and follows the formula:
+
+Minimum comparisons = ⌈log₂(n!)⌉
+
+For n = 4:
+
+4! = 24
+
+log₂(24) ≈ 4.58
+
+⌈4.58⌉ = 5
+
+Therefore, any comparison-based sorting algorithm requires at least 5 comparisons in the worst case to sort 4 elements.
+
+
+
+
+2. Radix Sort on Set S = {125, 27, 729, 1, 27, 8, 64, 343, 216} using radix = 9
+Radix Sort works digit by digit starting from the Least Significant Digit (LSD) using base-9 representation.
+
+Step 1: Convert to Base-9
+
+Decimal	Base-9
+125	151
+27	30
+729	1000
+1	1
+27	30
+8	8
+64	77
+343	418
+216	260
+Step 2: Sort by LSD (Rightmost digit)
+Group numbers by LSD and reorder.
+
+Step 3: Sort by next digit
+Repeat sorting based on the next more significant digit.
+
+Step 4: Sort by Most Significant Digit (MSD)
+Repeat for the highest-order digit.
+
+After completing these steps, the list is sorted.
+
+
+
+3. Radix Sort on {80, 27, 72, 1, 27, 8, 64, 34, 16} using radix = 9
+Step 1: Convert to Base-9
+
+Decimal	Base-9
+80	88
+27	30
+72	80
+1	1
+27	30
+8	8
+64	77
+34	37
+16	17
+Step 2: Sort by LSD (Rightmost digit)
+
+Group by last digit (base-9):
+
+LSD = 0 → 30, 30, 80
+
+LSD = 1 → 1
+
+LSD = 7 → 77, 17, 37
+
+LSD = 8 → 88, 8
+
+Reordered list after LSD sort:
+[1, 30, 30, 80, 8, 88, 77, 17, 37]
+
+Step 3: Sort by next digit
+
+1 → 1
+
+1 → 17
+
+3 → 30, 30, 37
+
+7 → 77
+
+8 → 80, 88
+
+Reordered list after second digit sort:
+[1, 17, 30, 30, 37, 77, 80, 88]
+
+Final Sorted List:
+[1, 8, 17, 30, 30, 37, 77, 80, 88]
