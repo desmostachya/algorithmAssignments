@@ -1,0 +1,65 @@
+Q1 A)
+-------------------
+
+a. Can the sequence 325641 be a valid postorder traversal of a BST?
+
+Given: 3 2 5 6 4 1
+
+In postorder traversal, the last element is the root. Here, root = 1.
+
+All elements before root must satisfy BST rules:
+- Left subtree: values < 1
+- Right subtree: values > 1
+
+But here, all values before root are > 1, and none are < 1.
+This violates the BST property that values in the left subtree must be less than the root.
+
+Therefore, 325641 is NOT a valid postorder traversal of any BST.
+
+Answer: Not possible
+
+
+b. Can the sequence 154623 be a valid postorder traversal of a BST?
+
+Given: 1 5 4 6 2 3
+
+Root = 3 (last element)
+
+Split the sequence into:
+- Left subtree (values < 3): should contain values less than 3
+- Right subtree (values > 3): should contain values greater than 3
+
+Looking at the sequence:
+- 1 is < 3 ⇒ left
+- 5 is > 3 ⇒ should go to right
+- But then 4 > 3 appears before 2 < 3, which is invalid in BST postorder.
+  Right subtree must contain only values > 3, in postorder format.
+
+Thus, BST property is violated.
+
+Answer:  Not possible
+
+
+-------------------------------------------------------------
+
+
+Q1 B)
+-------------------
+
+Let n be the number of distinct keys inserted into a BST in random order.
+
+Each key is inserted with comparisons to existing nodes — each such comparison is analogous to a "collision".
+
+Expected number of comparisons for inserting n random keys into a BST is:
+
+  E[C(n)] ≈ n * log n  (on average)
+
+There are a total of n(n-1)/2 possible key pairs.
+
+Expected number of comparisons per key pair is:
+
+  ≈ (n * log n) / (n(n-1)/2) = O(log n / n) < 1/2 (for large n)
+
+Therefore, the expected number of "collisions" (comparisons per pair) is less than 1/2.
+
+Answer:  The expected number of such events is < 1/2
