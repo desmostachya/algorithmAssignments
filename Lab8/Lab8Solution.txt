@@ -1,1 +1,371 @@
+Q1 A.
+(a): Can we generate output 325641?
 
+Let’s try to simulate step-by-step, pushing numbers 1 to 6 and popping to match the output.
+
+Target output: 3 2 5 6 4 1
+
+Start with empty stack.
+
+Push 1 → stack: [1]
+
+Push 2 → stack: [1, 2]
+
+Push 3 → stack: [1, 2, 3]
+
+Pop → 3  (match first output)
+
+Pop → 2  (match second output)
+
+Push 4 → stack: [1, 4]
+
+Push 5 → stack: [1, 4, 5]
+
+Pop → 5  (match third output)
+
+Push 6 → stack: [1, 4, 6]
+
+Pop → 6  (match fourth output)
+
+Pop → 4  (match fifth output)
+
+Pop → 1  (match sixth output)
+
+Yes! This works.
+
+Answer: YES, possible
+Sequence: S S S X X S S X S X X X
+
+(b): Can we generate output 154623?
+
+Target output: 1 5 4 6 2 3
+
+Let’s try step-by-step:
+
+Push 1 → stack: [1]
+
+Pop → 1  (match first output)
+
+Push 2 → stack: [2]
+
+Push 3 → stack: [2, 3]
+
+Push 4 → stack: [2, 3, 4]
+
+Push 5 → stack: [2, 3, 4, 5]
+
+Push 6 → stack: [2, 3, 4, 5, 6]
+
+Now the stack is [2, 3, 4, 5, 6] (from bottom to top)
+
+Next expected output is 5
+
+Pop → 6  (we needed 5, but top is 6)
+
+We can't skip 6, and since 6 is above 5 in the stack, 5 cannot be popped next.
+
+Answer: NO, not possible
+Reason: We must pop 6 before we can reach 5, but 5 is required before 6 in output.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q1 B.
+We are given:
+
+n keys stored in a hash table of size m = n^2
+
+A hash function h is randomly chosen from a universal class H
+
+Let X be the number of collisions
+
+We need to show that the expected number of collisions E[X] < 1/2
+
+Step-by-step solution:
+Let’s define a collision as a pair of keys (i, j) such that i ≠ j and h(i) = h(j)
+
+There are total C(n, 2) = n(n - 1) / 2 possible key pairs
+
+For each pair (i, j), let the indicator variable I(i,j) = 1 if h(i) = h(j) 0 otherwise
+
+Since the hash function is chosen from a universal class H, we know: P[h(i) = h(j)] ≤ 1 / m
+
+Let’s define the total number of collisions as:
+
+X = sum over all i < j of I(i,j)
+
+Then the expected number of collisions is:
+
+E[X] = E[sum over all i < j of I(i,j)] = sum over all i < j of E[I(i,j)] = sum over all i < j of P[h(i) = h(j)] ≤ (n(n - 1)/2) * (1 / m)
+
+But m = n^2, so:
+
+E[X] ≤ (n(n - 1)/2) * (1 / n^2) = (n - 1) / (2n)
+
+Now since (n - 1)/(2n) < 1/2 for all n ≥ 1, we get:
+
+E[X] < 1/2
+
+Answer:
+The expected number of collisions is less than 1/2
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q2. For each integer n = 1, 2, ..., 7, determine whether there exists a red-black tree having exactly n nodes, with all of them black.
+
+Red-black tree properties (simplified):
+
+Every node is either red or black.
+
+The root is black.
+
+Red nodes cannot have red children (no two red nodes in a row).
+
+Every path from a node to its descendant NULL nodes has the same number of black nodes (called black-height).
+
+We are asked if all nodes can be black. That means:
+
+The tree must satisfy the above properties.
+
+No red node is allowed.
+
+Now check each n from 1 to 7:
+
+n = 1
+
+A single root node (black).
+
+Yes
+
+n = 2
+
+Root is black, one child also black → violates black-height rule (one path has two black nodes, the other has one).
+
+No
+
+n = 3
+
+Root black, two black children → all paths have two black nodes.
+
+Yes
+
+n = 4
+
+Try making root black, two black children, one of those has a black child.
+
+Some paths will have 3 black nodes, some 2 → violates black-height.
+
+No
+
+n = 5
+
+Make a balanced tree: root black, two black children, each with one black child.
+
+All paths have 3 black nodes.
+
+Yes
+
+n = 6
+
+No balanced configuration gives equal black-height with 6 black nodes.
+
+No
+
+n = 7
+
+Full binary tree with black root, 2 black children, each with 2 black children.
+
+All paths have 3 black nodes.
+
+Yes
+
+Final Table:
+
+
+Num nodes n	Does there exist a red-black tree with n nodes, all of which are black?
+1	Yes
+2	No
+3	Yes
+4	No
+5	Yes
+6	No
+7	Yes
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Q3. For each integer n = 1, 2, ..., 7, determine whether there exists a red-black tree having exactly n nodes and exactly one red node.
+
+Red-black tree properties recap:
+
+Every node is red or black.
+
+The root must be black.
+
+Red nodes cannot have red children.
+
+All paths from a node to descendant NULL nodes must contain the same number of black nodes.
+
+We're now checking whether it's possible to build a red-black tree with exactly one red node for each n = 1 to 7.
+
+n = 1
+
+Only one node → must be black (root must be black).
+
+No red node possible.
+
+No
+
+n = 2
+
+Root black, one red child → satisfies all rules.
+
+Yes
+
+n = 3
+
+Root black, two children: one red, one black → all paths have same black-height.
+
+Yes
+
+n = 4
+
+Make root black, two black children, one has a red child → only one red node.
+
+Yes
+
+n = 5
+
+Root black, two black children.
+
+One of them has two children — make one red, other black (or NULL).
+
+Yes
+
+n = 6
+
+Balanced tree with exactly one red node → possible.
+
+Yes
+
+n = 7
+
+Full black binary tree (7 nodes), all black → already used in Q2.
+
+Add 1 red node at any valid position while keeping balance → still works.
+
+Yes
+
+Final Table:
+
+
+Num nodes n    	Does there exist a red-black tree with n nodes that has exactly one red node?
+1	              No
+2	              Yes
+3	              Yes
+4	              Yes
+5	              Yes
+6	              Yes
+7	              Yes
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Q4. Show the red-black tree that results after inserting: 21, 32, 64, 75, 15
+
+Step-by-step Red-Black Tree insertion with color and rotations:
+
+------------------------------------------------------------
+1. Insert 21
+------------------------------------------------------------
+21(B)
+
+Explanation:
+- Tree was empty, so 21 becomes root and is colored black.
+
+
+------------------------------------------------------------
+2. Insert 32
+------------------------------------------------------------
+   21(B)
+        \
+        32(R)
+
+Explanation:
+- 32 is inserted as red.
+- Parent (21) is black → No fix needed.
+
+
+------------------------------------------------------------
+3. Insert 64
+------------------------------------------------------------
+Before fix:
+   21(B)
+        \
+        32(R)
+              \
+              64(R)
+
+Violation:
+- Two consecutive reds (32 and 64)
+
+Fix:
+- Left rotation at 21
+- Recolor 32 to black, 21 and 64 to red
+
+After fix:
+     32(B)
+    /     \
+ 21(R)   64(R)
+
+
+------------------------------------------------------------
+4. Insert 75
+------------------------------------------------------------
+Before fix:
+     32(B)
+    /     \
+ 21(R)   64(R)
+               \
+               75(R)
+
+Violation:
+- Red parent (64) and red child (75)
+
+Fix:
+- Uncle (21) is red → Recolor 21 and 64 to black, 32 to red
+- Root (32) must be black
+
+After fix:
+     32(B)
+    /     \
+ 21(B)   64(B)
+               \
+               75(R)
+
+
+------------------------------------------------------------
+5. Insert 15
+------------------------------------------------------------
+     32(B)
+    /     \
+ 21(B)   64(B)
+  /          \
+15(R)       75(R)
+
+Explanation:
+- 15 is red.
+- Parent (21) is black → No fix needed.
+
+
+------------------------------------------------------------
+Final Red-Black Tree
+------------------------------------------------------------
+     32(B)
+    /     \
+ 21(B)   64(B)
+  /          \
+15(R)       75(R)
