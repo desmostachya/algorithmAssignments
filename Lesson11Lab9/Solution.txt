@@ -1,0 +1,146 @@
+Q1. Illustrate the operation of Max_Heapify(A, 3) using the array:
+A = (27, 17, 3, 16, 13, 10, 1, 5, 7, 12, 4, 8, 9, 0)
+
+The goal of Max_Heapify(A, 3) is to ensure that the subtree rooted at index 3 in the array satisfies the max-heap property. In a max-heap, every parent node is greater than or equal to its children. For heaps, we usually assume 1-based indexing unless told otherwise, so the array is indexed from 1 to 14, where A[1] = 27, A[2] = 17, A[3] = 3, ..., A[14] = 0. Let’s go through the process.
+
+Initial Array:
+A = (27, 17, 3, 16, 13, 10, 1, 5, 7, 12, 4, 8, 9, 0)
+
+Node at index 3: A[3] = 3
+Left child: At index 2 × 3 = 6, A[6] = 10
+Right child: At index 2 × 3 + 1 = 7, A[7] = 1
+We compare the node (3) with its children (10 and 1). The largest value is 10, which is greater than 3. Since the parent must be the largest in a max-heap, we swap A[3] with A[6].
+
+After first swap:
+A = (27, 17, 10, 16, 13, 3, 1, 5, 7, 12, 4, 8, 9, 0)
+
+Now, A[3] = 10, and we’ve moved 3 to index 6. We need to check the subtree rooted at index 6 to ensure it’s a max-heap.
+
+Node at index 6: A[6] = 3
+Left child: At index 2 × 6 = 12, A[12] = 8
+Right child: At index 2 × 6 + 1 = 13, A[13] = 9
+Compare 3 with its children 8 and 9. The largest is 9, which is greater than 3, so we swap A[6] with A[13].
+
+After second swap:
+A = (27, 17, 10, 16, 13, 9, 1, 5, 7, 12, 4, 8, 3, 0)
+
+Now, A[6] = 9, and 3 is at index 13. We check the subtree at index 13.
+
+Node at index 13: A[13] = 3
+Left child: 2 × 13 = 26 > 14 (array size), so no left child
+Right child: 2 × 13 + 1 = 27 > 14, so no right child
+Since index 13 is a leaf node (no children), no further adjustments are needed.
+
+Final Array:
+A = (27, 17, 10, 16, 13, 9, 1, 5, 7, 12, 4, 8, 3, 0)
+
+Let’s verify the subtree at index 3:
+
+A[3] = 10, children A[6] = 9, A[7] = 1 → 10 ≥ 9 and 10 ≥ 1
+A[6] = 9, children A[12] = 8, A[13] = 3 → 9 ≥ 8 and 9 ≥ 3
+A[7] = 1, child A[14] = 0 → 1 ≥ 0
+The max-heap property holds, so we’re done.
+
+Result for Q1: The array after Max_Heapify(A, 3) is (27, 17, 10, 16, 13, 9, 1, 5, 7, 12, 4, 8, 3, 0).
+
+Q2. Show the operation of Build-Heap using the array:
+A = (5, 3, 17, 10, 84, 19, 6, 22, 9)
+
+Build-Heap transforms an unsorted array into a max-heap by calling Max_Heapify on all non-leaf nodes, starting from the last non-leaf node up to the root. With 9 elements (n = 9, 1-indexed), the last non-leaf node is at index ⌊n/2⌋ = ⌊9/2⌋ = 4.
+
+Initial Array:
+A = (5, 3, 17, 10, 84, 19, 6, 22, 9)
+
+Step 1: Max_Heapify(A, 4)
+A[4] = 10
+Left: 2 × 4 = 8, A[8] = 22
+Right: 2 × 4 + 1 = 9, A[9] = 9
+Largest = 22 > 10, swap A[4] and A[8]
+A = (5, 3, 17, 22, 84, 19, 6, 10, 9)
+
+Check index 8: A[8] = 10, children at 16 and 17 > 9, so none. Done.
+Step 2: Max_Heapify(A, 3)
+A[3] = 17
+Left: 2 × 3 = 6, A[6] = 19
+Right: 2 × 3 + 1 = 7, A[7] = 6
+Largest = 19 > 17, swap A[3] and A[6]
+A = (5, 3, 19, 22, 84, 17, 6, 10, 9)
+
+Check index 6: A[6] = 17, no children (12, 13 > 9). Done.
+Step 3: Max_Heapify(A, 2)
+A[2] = 3
+Left: 2 × 2 = 4, A[4] = 22
+Right: 2 × 2 + 1 = 5, A[5] = 84
+Largest = 84 > 3, swap A[2] and A[5]
+A = (5, 84, 19, 22, 3, 17, 6, 10, 9)
+
+Check index 5: A[5] = 3, children at 10, 11 > 9, none. Done.
+Step 4: Max_Heapify(A, 1)
+A[1] = 5
+Left: 2 × 1 = 2, A[2] = 84
+Right: 2 × 1 + 1 = 3, A[3] = 19
+Largest = 84 > 5, swap A[1] and A[2]
+A = (84, 5, 19, 22, 3, 17, 6, 10, 9)
+
+Check index 2: A[2] = 5, left A[4] = 22, right A[5] = 3
+Largest = 22 > 5, swap A[2] and A[4]
+A = (84, 22, 19, 5, 3, 17, 6, 10, 9)
+
+Check index 4: A[4] = 5, left A[8] = 10, right A[9] = 9
+Largest = 10 > 5, swap A[4] and A[8]
+A = (84, 22, 19, 10, 3, 17, 6, 5, 9)
+
+Check index 8: A[8] = 5, no children. Done.
+Final Array:
+A = (84, 22, 19, 10, 3, 17, 6, 5, 9)
+
+This is now a max-heap.
+
+Result for Q2: The array after Build-Heap is (84, 22, 19, 10, 3, 17, 6, 5, 9).
+
+Q3. Illustrate the operation of Heapsort using the array:
+(5, 13, 2, 25, 7, 17, 20, 8, 4)
+
+Heapsort first builds a max-heap, then repeatedly extracts the maximum element (root) and rebuilds the heap.
+
+Step 1: Build Max-Heap
+n = 9, start at ⌊9/2⌋ = 4. Using the same process as Q2 (details omitted for brevity):
+
+Initial: (5, 13, 2, 25, 7, 17, 20, 8, 4)
+After Build-Heap: (25, 13, 20, 8, 7, 17, 2, 5, 4)
+Step 2: Sort
+Heap size = 9, swap A[1] = 25 with A[9] = 4, reduce size to 8
+A = (4, 13, 20, 8, 7, 17, 2, 5, 25)
+Max_Heapify(A, 1, size=8):
+Eventually: (20, 13, 17, 8, 7, 4, 2, 5, 25)
+Continue:
+
+Size = 8, swap 20 and 5 → (5, 13, 17, 8, 7, 4, 2, 20, 25)
+Heapify → (17, 13, 5, 8, 7, 4, 2, 20, 25)
+Size = 7, swap 17 and 2 → (2, 13, 5, 8, 7, 4, 17, 20, 25)
+Heapify → (13, 8, 5, 2, 7, 4, 17, 20, 25)
+Size = 6, swap 13 and 4 → (4, 8, 5, 2, 7, 13, 17, 20, 25)
+Heapify → (8, 7, 5, 2, 4, 13, 17, 20, 25)
+Size = 5, swap 8 and 4 → (4, 7, 5, 2, 8, 13, 17, 20, 25)
+Heapify → (7, 4, 5, 2, 8, 13, 17, 20, 25)
+Size = 4, swap 7 and 2 → (2, 4, 5, 7, 8, 13, 17, 20, 25)
+Heapify → (5, 4, 2, 7, 8, 13, 17, 20, 25)
+Size = 3, swap 5 and 2 → (2, 4, 5, 7, 8, 13, 17, 20, 25)
+Heapify → (4, 2, 5, 7, 8, 13, 17, 20, 25)
+Size = 2, swap 4 and 2 → (2, 4, 5, 7, 8, 13, 17, 20, 25)
+Heapify → (2, 4, 5, 7, 8, 13, 17, 20, 25)
+Size = 1, done.
+Final Array:
+(2, 4, 5, 7, 8, 13, 17, 20, 25)
+
+Result for Q3: Sorted array is (2, 4, 5, 7, 8, 13, 17, 20, 25).
+
+Q4. Show that in an n-element heap, there are at most ⌈n / 2^(h+1)⌉ nodes of height h.
+In a heap (binary, nearly complete), height h of a node is the number of edges from it to a leaf. The root is at height h = log₂(n) (approx), leaves at h = 0.
+
+Height 0 (leaves): Nodes with no children. In a heap of n nodes, leaves are from ⌊n/2⌋ + 1 to n, roughly n/2, at most ⌈n/2⌉ = ⌈n / 2^(0+1)⌉.
+Height 1: Parents of leaves, at level h-1 from top. Number of nodes at level k is at most 2^k. Total levels = ⌈log₂(n+1)⌉, so nodes at height 1 are at most ⌈n / 2^2⌉.
+General h: Nodes at height h have subtrees of height h-1. In a perfect binary tree of height h, there are 2^h leaves, and n / 2^(h+1) approximates nodes at height h, adjusted by ceiling for partial levels.
+For any h, the number is bounded by ⌈n / 2^(h+1)⌉ due to the geometric decrease in nodes per level.
+
+Result for Q4: Proven that nodes of height h are at most ⌈n / 2^(h+1)⌉.
