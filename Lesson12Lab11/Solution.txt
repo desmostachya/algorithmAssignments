@@ -1,0 +1,140 @@
+Q1)
+
+### Q1a: Let U = {A, B}. Draw G[U].
+- Vertices in U: {A, B}
+- Edges in G[U]: {(A, B)} (only edge between A and B exists)
+- Result: G[U] has vertices {A, B} and edge {(A, B)}. It’s a single edge connecting A and B.
+
+### Q1b: Let W = {A, C, G, F}. Draw G[W].
+- Vertices in W: {A, C, G, F}
+- Edges in G[W]: 
+  - (A, C): Exists
+  - (A, F): Exists
+  - (C, F): Exists
+  - (C, G): Exists
+  - (F, G): Exists
+- Result: G[W] has vertices {A, C, G, F} and edges {(A,C), (A,F), (C,F), (C,G), (F,G)}. 
+  It’s a connected graph with C, F, G forming a triangle and A connected to C and F.
+
+### Q1c: Let Y = {A, B, D, E}. Draw G[Y].
+- Vertices in Y: {A, B, D, E}
+- Edges in G[Y]: 
+  - (A, B): Exists
+  - (A, E): Exists
+  - (B, D): Exists
+  - (B, E): Exists
+  - (D, E): Exists
+- Result: G[Y] has vertices {A, B, D, E} and edges {(A,B), (A,E), (B,D), (B,E), (D,E)}. 
+  It’s a cycle A-B-D-E-A with an extra edge (B,E).
+
+### Q1d: Consider the subgraph H of G. Is there a subset X of the vertex set V so that H = G[X]? Explain.
+- Subgraph H: Vertices {A, B, F}, edges {(A,B), (A,F)}
+- Try X = {A, B, F}:
+  - Vertices in G[X]: {A, B, F}
+  - Edges in G among {A, B, F}:
+    - (A, B): Exists
+    - (A, F): Exists
+    - (B, F): Does not exist
+  - G[{A, B, F}] has edges {(A,B), (A,F)}, matching H.
+- Result: Yes, X = {A, B, F} works. H = G[{A, B, F}], since the induced subgraph has 
+  vertices {A, B, F} and edges {(A,B), (A,F)}, matching H.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q2)
+- **Part 1: Show that a graph has a unique MST if, for every cut, there is a unique light edge crossing the cut.**
+  - If every cut has a unique light edge, building an MST (e.g., with Kruskal’s) is deterministic because the minimum-weight edge for each cut must be chosen.
+  - Any different MST would require choosing a non-light edge for some cut, which contradicts the minimum weight property.
+  - Thus, the MST is unique.
+
+- **Part 2: Show that the converse is not true by giving a counterexample.**
+  - **Counterexample Graph**: Vertices {A, B, C}, edges: (A, B) weight 1, (B, C) weight 1, (A, C) weight 2.
+  - **Unique MST**: {(A, B), (B, C)} (total weight 2), as including (A, C) would increase weight to 3.
+  - **Cut Check**: For S = {B}, V - S = {A, C}, crossing edges are (A, B) and (B, C), both weight 1 (two light edges).
+  - **Conclusion**: The graph has a unique MST, but not every cut has a unique light edge, proving the converse is false.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+### Q1.A: 
+**Depth-First Search Traversal:**
+
+Starting from vertex q (alphabetical order):
+
+1. Visit q (discovery time: 1)
+2. Visit r (from q) (discovery time: 2)
+3. Visit t (from r) (discovery time: 3)
+4. Visit s (from t) (discovery time: 4)
+5. s has an edge to t, which is already visited (back edge)
+6. Visit v (from s) (discovery time: 5)
+7. Visit w (from v) (discovery time: 6)
+8. w has an edge to q, which is already visited (back edge)
+9. Finish w (finishing time: 7)
+10. Finish v (finishing time: 8)
+11. Finish s (finishing time: 9)
+12. Finish t (finishing time: 10)
+13. Visit x (from r) (discovery time: 11)
+14. x has an edge to r, which is already visited (back edge)
+15. Visit y (from x) (discovery time: 12)
+16. y has an edge to w, which is already finished (forward edge)
+17. Finish y (finishing time: 13)
+18. Finish x (finishing time: 14)
+19. Finish r (finishing time: 15)
+20. Finish q (finishing time: 16)
+
+Edge	Classification
+(q, r)	Tree
+(q, s)	Tree
+(r, t)	Tree
+(r, y)	Tree
+(s, t)	Back
+(s, v)	Tree
+(v, w)	Tree
+(w, q)	Back
+(x, r)	Back
+(x, y)	Tree
+(y, w)	Forward
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Q3)
+### Finding a Hamiltonian Cycle in the Given Graph
+- **Graph Structure**: The graph is a Petersen graph with 10 vertices.
+  - Vertices labeled:
+    - Outer cycle: 0, 1, 2, 3, 4 (cycle: 0-1-2-3-4-0)
+    - Inner star: 5, 6, 7, 8, 9 (star: 5-7-9-6-8-5)
+    - Outer to inner edges: (0,5), (1,6), (2,7), (3,8), (4,9)
+- **Hamiltonian Cycle**:
+  - Start at vertex 0 and follow the path:
+  - 0 -> 1 -> 6 -> 9 -> 4 -> 3 -> 8 -> 5 -> 2 -> 7 -> 0
+- **Verification**:
+  - Vertices visited: 0, 1, 6, 9, 4, 3, 8, 5, 2, 7 (all 10 vertices, no repeats).
+  - Edges used:
+    - (0,1), (1,6), (6,9), (9,4), (4,3), (3,8), (8,5), (5,2), (2,7), (7,0)
+    - All edges exist in the Petersen graph structure.
+  - Cycle closes: Returns to 0 after visiting all vertices.
+- **Result**:
+  - The Hamiltonian cycle is: 0-1-6-9-4-3-8-5-2-7-0.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q4)
+**Modified Prim's Algorithm for Maximum Spanning Tree:**
+
+1. Initialize an empty set `MST` to store the edges of the maximum spanning tree.
+2. Select an arbitrary vertex and add it to a set `visited_vertices`.
+3. While the number of edges in `MST` is less than (number of vertices - 1):
+   a. Find the edge with the maximum weight that connects a vertex in `visited_vertices` to a vertex not in `visited_vertices`.
+   b. Add this edge to `MST` and the new vertex to `visited_vertices`.
+4. Return `MST`.
+
+**Modified Kruskal's Algorithm for Maximum Spanning Tree:**
+
+1. Sort all the edges of the graph in descending order of their weights.
+2. Initialize an empty set `MST` to store the edges of the maximum spanning tree.
+3. Initialize a disjoint-set data structure to keep track of connected components.
+4. For each edge (u, v) in the sorted list:
+   a. Find the sets that u and v belong to.
+   b. If u and v belong to different sets:
+      i. Add the edge (u, v) to `MST`.
+      ii. Union the sets containing u and v.
+5. Return `MST`.
