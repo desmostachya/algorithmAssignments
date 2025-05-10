@@ -1,0 +1,98 @@
+Q1: Modified Knapsack Algorithm with Keep Array
+We need to modify the 0/1 Knapsack dynamic programming algorithm to track which items are selected in the optimal solution. The original algorithm uses a table V[i,j] to store the maximum value achievable with the first i items and capacity j. We’ll add a Keep[i,j] array to record whether item i is included in the optimal solution for each subproblem. Then, we’ll backtrack through Keep to print the selected items.
+
+Pseudocode
+Knapsack(n, W, v[], w[])
+    // Initialize arrays
+    Initialize V[0..n, 0..W] = 0  // Value table
+    Initialize Keep[0..n, 0..W] = false  // Tracks if item i is included
+
+    // Fill the tables
+    for i from 1 to n
+        for j from 0 to W
+            if j - w[i] >= 0
+                if V[i-1, j] < v[i] + V[i-1, j - w[i]]
+                    V[i, j] = v[i] + V[i-1, j - w[i]]
+                    Keep[i, j] = true
+                else
+                    V[i, j] = V[i-1, j]
+                    Keep[i, j] = false
+            else
+                V[i, j] = V[i-1, j]
+                Keep[i, j] = false
+
+    // Backtrack to find selected items
+    PrintSelectedItems(n, W, Keep, w)
+
+    return V[n, W]
+
+PrintSelectedItems(n, W, Keep, w[])
+    i = n
+    j = W
+    while i > 0 and j >= 0
+        if Keep[i, j] == true
+            print "Item", i, "selected"
+            j = j - w[i]
+        i = i - 1
+
+Explanation
+Arrays:
+V[i,j]: Stores the maximum value for the first i items with capacity j.
+Keep[i,j]: Boolean array. If Keep[i,j] = true, item i is included in the optimal solution for capacity j.
+Filling the Tables:
+For each item i and capacity j, check if including item i (if j - w[i] >= 0) gives a better value than excluding it.
+If including item i is better, set V[i,j] to v[i] + V[i-1, j - w[i]] and Keep[i,j] = true.
+Otherwise, exclude item i, set V[i,j] = V[i-1, j], and Keep[i,j] = false.
+Printing Items:
+Start at V[n,W]. If Keep[i,j] = true, item i is selected, reduce capacity by w[i], and move to i-1. Continue until i = 0 or j = 0.
+This gives us the maximum value and the list of selected items.
+
+Q2: Running Time Complexity
+Let’s analyze the time complexity of the pseudocode and compare it to the brute force approach.
+
+Time Complexity of the Dynamic Programming Algorithm
+Table Initialization:
+V and Keep are (n+1) × (W+1) arrays. Initializing them to 0 takes O(nW) time.
+Filling the Tables:
+Two nested loops: i from 1 to n, and j from 0 to W.
+For each (i,j), we perform constant-time operations (comparisons, additions, assignments).
+Total: O(nW) iterations × O(1) per iteration = O(nW).
+Printing Selected Items:
+The PrintSelectedItems function iterates at most n times (from i = n to i = 1), with constant-time operations per iteration.
+Total: O(n).
+Overall Time Complexity:
+O(nW) + O(n) = O(nW).
+Comparison with Brute Force
+Brute Force Approach:
+The brute force method tries all possible subsets of the n items (include or exclude each item).
+There are 2^n possible subsets.
+For each subset, we compute the total weight and value, which takes O(n) time.
+Total time: O(n · 2^n), which is exponential in n.
+Dynamic Programming:
+Time is O(nW), which is polynomial in n and W (pseudo-polynomial, as we’ll discuss in Q3).
+This is much faster than O(n · 2^n) for moderate values of n and W.
+Conclusion: The dynamic programming approach significantly reduces the time complexity from exponential O(n · 2^n) to pseudo-polynomial O(nW).
+
+Q3: Why Knapsack Problem is Exponential
+The Knapsack problem is exponential in the brute force approach due to the number of possible solutions, which grows exponentially with the number of items n. Let’s explain this by considering the inputs (n and W) and why it leads to exponential behavior.
+
+Brute Force Explanation
+Input n: The number of items.
+To find the optimal subset, brute force evaluates all possible combinations of items (include or exclude each item).
+With n items, there are 2^n possible subsets (each item can be in or out).
+For each subset, we compute the total weight and value, which takes O(n) time.
+Thus, the time complexity is O(n · 2^n), exponential in n.
+Input W: The knapsack capacity.
+In brute force, W doesn’t directly affect the number of subsets, but it determines whether a subset is valid (total weight ≤ W).
+However, since all 2^n subsets are checked, W doesn’t reduce the exponential growth driven by n.
+Why Exponential?
+The exponential behavior comes from n, as the solution space (number of subsets) doubles with each additional item.
+Example: For n = 10, there are 2^10 = 1024 subsets. For n = 20, it’s 2^20 ≈ 1 million. For n = 30, it’s 2^30 ≈ 1 billion.
+This exponential growth makes brute force impractical for large n.
+The dynamic programming approach avoids this by solving subproblems and storing results in the V table, reducing the complexity to O(nW).
+Pseudo-Polynomial Note
+The O(nW) complexity is polynomial in the numeric value of W, not its bit length (log W).
+If W is very large (e.g., W = 2^m), the time becomes O(n · 2^m), which is exponential in the input size (m bits for W).
+This makes the Knapsack problem NP-complete when inputs are encoded in binary, as the problem’s hardness depends on the magnitude of W.
+Summary: The Knapsack problem is exponential in the brute force case due to the 2^n subsets, driven by the number of items n. 
+Dynamic programming reduces this to O(nW), but the problem remains challenging for large W due to its pseudo-polynomial nature.
