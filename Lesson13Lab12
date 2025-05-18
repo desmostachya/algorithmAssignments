@@ -1,5 +1,5 @@
 1. Suppose Prob1, Prob2, and Prob3 are decision problems and Prob1 is polynomial reducible to Prob2, and Prob2 is polynomial reducible to Prob3. Explain why Prob1 must be polynomial reducible to Prob3.
-This is about how problems can be "converted" into each other. When we say Prob1 is polynomial reducible to Prob2, it means we can solve Prob1 by turning it into Prob2 and solving Prob2 in a reasonable 
+=> This is about how problems can be "converted" into each other. When we say Prob1 is polynomial reducible to Prob2, it means we can solve Prob1 by turning it into Prob2 and solving Prob2 in a reasonable 
 amount of time (polynomial time). The same goes for Prob2 to Prob3—we can solve Prob2 by turning it into Prob3 and solving Prob3 in polynomial time.
 Now, since Prob1 can be turned into Prob2, and Prob2 can be turned into Prob3, we can just chain these steps together: take Prob1, turn it into Prob2, then take that Prob2 and turn it into Prob3.
 Both steps take polynomial time, and adding two polynomial times together is still polynomial (like if one step takes n^2 time and the other takes n^3, the total is still polynomial, like n^2 + n^3).
@@ -7,7 +7,7 @@ So, Prob1 can be solved by turning it into Prob3 through Prob2 in polynomial tim
 
 2. Illustrate the proof that the HamiltonianCycle problem is polynomial reducible to TSP by considering the following Hamiltonian graph—an instance of HamiltonianCycle—and transforming it to a
 TSP instance in polynomial time so that a solution to the HC problem yields a solution to the TSP problem, and conversely.
-Let’s break this down. The HamiltonianCycle (HC) problem is about finding a cycle in a graph that visits every vertex exactly once and returns to the starting point. The Traveling Salesman Problem (TSP)
+=> The HamiltonianCycle (HC) problem is about finding a cycle in a graph that visits every vertex exactly once and returns to the starting point. The Traveling Salesman Problem (TSP)
 is about finding the shortest path that visits every vertex and returns to the start.
 We’re given a graph with vertices A, B, C, D, and edges A-B, B-D, D-C, C-A (it’s a cycle: A → B → D → C → A). This graph has a Hamiltonian cycle because we can visit all vertices in a loop.
 To turn this HC instance into a TSP instance, we need to create a weighted graph for TSP. Here’s how we do it:
@@ -37,6 +37,7 @@ This shows that if the graph has a Hamiltonian cycle, the TSP will have a tour o
 The transformation and checking are both polynomial time, so HC is polynomial reducible to TSP.
 
 3. Show that TSP is NP-complete. (Hint: use the relationship between the TSP and HamiltonianCycle discussed in the slides. You may assume that the HamiltonianCycle problem is NP-complete.)
+=> 
 To show TSP is NP-complete, we need two things: (1) TSP is in NP, and (2) an NP-complete problem (like HamiltonianCycle) can be reduced to TSP in polynomial time.
 
 TSP is in NP: A problem is in NP if we can verify a solution quickly (in polynomial time). For TSP, if someone gives us a tour (a path that visits all vertices and returns to the start)
@@ -49,7 +50,7 @@ So, TSP is NP-complete because it’s in NP and an NP-complete problem (HC) redu
 
 4. Find an O(n) algorithm that does the following: Given a size n input array of integers, output the first numbers in the array (from left to right) whose sum is exactly 10 
 (or, indicate that no such numbers can be found).
-We need to find the first set of numbers in an array that add up to 10, scanning from left to right, and do it in O(n) time (meaning we only go through the array once or a few times).
+=> We need to find the first set of numbers in an array that add up to 10, scanning from left to right, and do it in O(n) time (meaning we only go through the array once or a few times).
 Here’s a simple idea: use a sliding window. We’ll keep adding numbers from the left, and if the sum gets too big, we’ll remove numbers from the left until the sum is 10 or we can’t find such a set.
 Here’s the algorithm in steps:
 
@@ -87,7 +88,7 @@ right=3: sum=7+3=10, exactly 10! The numbers are [4, 2, 1, 3].
 The algorithm stops and outputs [4, 2, 1, 3]. It’s O(n) because we only traverse the array once.
 
 5. Work through the steps of the Dynamic Programming solution to SubsetSum in the case in which S = [3, 2, 1, 5] and k = 4.
-The SubsetSum problem is about finding if there’s a subset of numbers in the array that adds up to a target k. Here, the array S = [3, 2, 1, 5] and k = 4. We’ll use dynamic programming (DP) to solve this.
+=> The SubsetSum problem is about finding if there’s a subset of numbers in the array that adds up to a target k. Here, the array S = [3, 2, 1, 5] and k = 4. We’ll use dynamic programming (DP) to solve this.
 DP for SubsetSum uses a table to track whether we can make a sum using numbers up to a certain point. Let’s set it up:
 
 We have numbers [3, 2, 1, 5], so the array has 4 elements (n=4).
