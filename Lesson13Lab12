@@ -1,0 +1,161 @@
+1. Suppose Prob1, Prob2, and Prob3 are decision problems and Prob1 is polynomial reducible to Prob2, and Prob2 is polynomial reducible to Prob3. Explain why Prob1 must be polynomial reducible to Prob3.
+This is about how problems can be "converted" into each other. When we say Prob1 is polynomial reducible to Prob2, it means we can solve Prob1 by turning it into Prob2 and solving Prob2 in a reasonable 
+amount of time (polynomial time). The same goes for Prob2 to Prob3—we can solve Prob2 by turning it into Prob3 and solving Prob3 in polynomial time.
+Now, since Prob1 can be turned into Prob2, and Prob2 can be turned into Prob3, we can just chain these steps together: take Prob1, turn it into Prob2, then take that Prob2 and turn it into Prob3.
+Both steps take polynomial time, and adding two polynomial times together is still polynomial (like if one step takes n^2 time and the other takes n^3, the total is still polynomial, like n^2 + n^3).
+So, Prob1 can be solved by turning it into Prob3 through Prob2 in polynomial time, which means Prob1 is polynomial reducible to Prob3.
+
+2. Illustrate the proof that the HamiltonianCycle problem is polynomial reducible to TSP by considering the following Hamiltonian graph—an instance of HamiltonianCycle—and transforming it to a
+TSP instance in polynomial time so that a solution to the HC problem yields a solution to the TSP problem, and conversely.
+Let’s break this down. The HamiltonianCycle (HC) problem is about finding a cycle in a graph that visits every vertex exactly once and returns to the starting point. The Traveling Salesman Problem (TSP)
+is about finding the shortest path that visits every vertex and returns to the start.
+We’re given a graph with vertices A, B, C, D, and edges A-B, B-D, D-C, C-A (it’s a cycle: A → B → D → C → A). This graph has a Hamiltonian cycle because we can visit all vertices in a loop.
+To turn this HC instance into a TSP instance, we need to create a weighted graph for TSP. Here’s how we do it:
+
+Make a complete graph where every vertex connects to every other vertex (so add edges like A-D, B-C, etc., since the original graph didn’t have them).
+Assign weights to the edges:
+
+If an edge exists in the HC graph (like A-B, B-D, D-C, C-A), give it a weight of 1.
+If an edge doesn’t exist (like A-D, B-C), give it a big weight, say 100 (something much larger than the number of vertices, which is 4 here).
+
+So, the TSP graph looks like this:
+
+A-B: 1, B-D: 1, D-C: 1, C-A: 1 (these were in the original graph).
+A-D: 100, B-C: 100 (these are the new edges).
+
+This transformation is fast—it takes polynomial time because we’re just adding edges and setting weights based on the original graph.
+Now, let’s see how a solution to HC gives a solution to TSP, and vice versa:
+
+HC to TSP: The HC in the original graph is A → B → D → C → A. In the TSP graph, follow the same path: A → B (weight 1), B → D (1), D → C (1), C → A (1). 
+Total weight = 4. Since 4 is the number of vertices, this is the smallest possible total weight using only the edges with weight 1.
+Any path that uses a weight-100 edge (like A → D) would have a much higher total, like 100 + something, which isn’t optimal. 
+So, the best TSP tour will always use the HC path if one exists.
+TSP to HC: If the TSP solution gives a tour with total weight 4 (number of vertices), it must have used only the edges with weight 1 (because using any weight-100 edge would make the total much bigger). 
+Those weight-1 edges are exactly the ones from the original graph, so the TSP tour A → B → D → C → A is a Hamiltonian cycle in the original graph.
+
+This shows that if the graph has a Hamiltonian cycle, the TSP will have a tour of weight 4, and if the TSP has a tour of weight 4, the original graph has a Hamiltonian cycle.
+The transformation and checking are both polynomial time, so HC is polynomial reducible to TSP.
+
+3. Show that TSP is NP-complete. (Hint: use the relationship between the TSP and HamiltonianCycle discussed in the slides. You may assume that the HamiltonianCycle problem is NP-complete.)
+To show TSP is NP-complete, we need two things: (1) TSP is in NP, and (2) an NP-complete problem (like HamiltonianCycle) can be reduced to TSP in polynomial time.
+
+TSP is in NP: A problem is in NP if we can verify a solution quickly (in polynomial time). For TSP, if someone gives us a tour (a path that visits all vertices and returns to the start)
+and a total weight, we can check two things: (a) does the path visit every vertex exactly once and return to the start, and (b) does the total weight match the claimed value? 
+Checking the path and adding up the weights takes polynomial time (just go through the vertices and sum the weights), so TSP is in NP.
+Reduce HamiltonianCycle to TSP: We’re told HamiltonianCycle (HC) is NP-complete, and from question 2, we already showed that HC can be reduced to TSP in polynomial time.
+Since HC is NP-complete, and we can transform any HC problem into a TSP problem (like we did by setting weights of 1 and 100), TSP must also be NP-complete.
+
+So, TSP is NP-complete because it’s in NP and an NP-complete problem (HC) reduces to it.
+
+4. Find an O(n) algorithm that does the following: Given a size n input array of integers, output the first numbers in the array (from left to right) whose sum is exactly 10 
+(or, indicate that no such numbers can be found).
+We need to find the first set of numbers in an array that add up to 10, scanning from left to right, and do it in O(n) time (meaning we only go through the array once or a few times).
+Here’s a simple idea: use a sliding window. We’ll keep adding numbers from the left, and if the sum gets too big, we’ll remove numbers from the left until the sum is 10 or we can’t find such a set.
+Here’s the algorithm in steps:
+
+Start with two pointers, left and right, both at the start of the array (index 0).
+Keep a running sum starting at 0.
+Move right forward, adding each number to sum:
+
+If sum equals 10, we’ve found our set (from left to right).
+If sum is greater than 10, subtract the number at left from sum and move left forward. Repeat until sum is 10 or less.
+If sum is less than 10, keep moving right forward.
+
+If we reach the end of the array (right hits the end) and sum isn’t 10, there’s no solution.
+
+This takes O(n) time because each element is added to the sum once (when right moves) and removed at most once (when left moves). Each pointer moves across the array at most once.
+Here’s some pseudocode to make it clear:
+textCopyfunction findSum10(arr, n):
+    left = 0
+    sum = 0
+    for right = 0 to n-1:
+        sum = sum + arr[right]
+        while sum > 10 and left <= right:
+            sum = sum - arr[left]
+            left = left + 1
+        if sum == 10:
+            return arr[left] to arr[right] (the numbers from left to right)
+    return "No such numbers found"
+For example, if the array is [4, 2, 1, 3, 5]:
+
+Start: left=0, right=0, sum=0.
+right=0: sum=4, less than 10.
+right=1: sum=4+2=6, less than 10.
+right=2: sum=6+1=7, less than 10.
+right=3: sum=7+3=10, exactly 10! The numbers are [4, 2, 1, 3].
+
+The algorithm stops and outputs [4, 2, 1, 3]. It’s O(n) because we only traverse the array once.
+
+5. Work through the steps of the Dynamic Programming solution to SubsetSum in the case in which S = [3, 2, 1, 5] and k = 4.
+The SubsetSum problem is about finding if there’s a subset of numbers in the array that adds up to a target k. Here, the array S = [3, 2, 1, 5] and k = 4. We’ll use dynamic programming (DP) to solve this.
+DP for SubsetSum uses a table to track whether we can make a sum using numbers up to a certain point. Let’s set it up:
+
+We have numbers [3, 2, 1, 5], so the array has 4 elements (n=4).
+The target sum is k = 4, so we’ll make a table for sums from 0 to 4.
+Create a 2D table dp[i][j] where dp[i][j] is true if we can make sum j using the first i numbers, and false otherwise.
+
+The table will have:
+
+Rows: 0 to 4 (for using 0 numbers, then the first number, then the first two, etc.).
+Columns: 0 to 4 (for sums 0 to 4).
+
+Step 1: Initialize the table
+
+Row 0 (using 0 numbers): We can only make sum 0 (by taking nothing), so dp[0][0] = true, and dp[0][1] = dp[0][2] = dp[0][3] = dp[0][4] = false.
+
+Table so far:
+textCopy       Sum:  0  1  2  3  4
+Use 0 nums:  T  F  F  F  F
+Step 2: Fill the table row by row
+
+Row 1 (use first number: 3):
+
+dp[1][0]: Can we make sum 0? Yes, by taking no numbers, so dp[1][0] = true.
+dp[1][1]: Can we make sum 1? Either without using 3 (dp[0][1] = false) or by using 3 to make 1 (need 1-3=-2, not possible), so false.
+dp[1][2]: Either without 3 (dp[0][2] = false) or use 3 to make 2 (need 2-3=-1, not possible), so false.
+dp[1][3]: Either without 3 (dp[0][3] = false) or use 3 to make 3 (need 3-3=0, and dp[0][0] = true), so true.
+dp[1][4]: Either without 3 (dp[0][4] = false) or use 3 to make 4 (need 4-3=1, and dp[0][1] = false), so false.
+
+Table:
+textCopy       Sum:  0  1  2  3  4
+Use 0 nums:  T  F  F  F  F
+Use 1 num:   T  F  F  T  F
+
+Row 2 (use first two numbers: 3, 2):
+
+dp[2][0]: Sum 0? Yes, take nothing, so true.
+dp[2][1]: Without 2: dp[1][1] = false. Use 2: need 1-2=-1, not possible. So false.
+dp[2][2]: Without 2: dp[1][2] = false. Use 2: need 2-2=0, and dp[1][0] = true, so true.
+dp[2][3]: Without 2: dp[1][3] = true. Use 2: need 3-2=1, and dp[1][1] = false. So true (from without 2).
+dp[2][4]: Without 2: dp[1][4] = false. Use 2: need 4-2=2, and dp[1][2] = false. So false.
+
+Table:
+textCopy       Sum:  0  1  2  3  4
+Use 0 nums:  T  F  F  F  F
+Use 1 num:   T  F  F  T  F
+Use 2 nums:  T  F  T  T  F
+
+Row 3 (use first three numbers: 3, 2, 1):
+
+dp[3][0]: true.
+dp[3][1]: Without 1: dp[2][1] = false. Use 1: need 1-1=0, and dp[2][0] = true, so true.
+dp[3][2]: Without 1: dp[2][2] = true. Use 1: need 2-1=1, and dp[2][1] = false. So true.
+dp[3][3]: Without 1: dp[2][3] = true. Use 1: need 3-1=2, and dp[2][2] = true, so true.
+dp[3][4]: Without 1: dp[2][4] = false. Use 1: need 4-1=3, and dp[2][3] = true, so true.
+
+Table:
+textCopy       Sum:  0  1  2  3  4
+Use 0 nums:  T  F  F  F  F
+Use 1 num:   T  F  F  T  F
+Use 2 nums:  T  F  T  T  F
+Use 3 nums:  T  T  T  T  T
+
+Row 4 (use all numbers: 3, 2, 1, 5): We could keep going, but since we’re only checking for sum 4, and dp[3][4] = true, we can stop here. This means we can make sum 4 using the first three numbers.
+
+Step 3: Find the subset
+
+dp[3][4] = true, so we used the first three numbers (3, 2, 1) to make 4.
+Backtrack: At dp[3][4], we used 1 (because dp[2][3] = true). Then at dp[2][3], we didn’t use 2 (because dp[1][3] = true). At dp[1][3], we used 3.
+So the subset is [3, 1], which adds to 4.
+
+Answer: Yes, there is a subset that sums to 4, and it’s [3, 1].
